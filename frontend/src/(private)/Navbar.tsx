@@ -29,20 +29,20 @@ export default function NavBar(props: NavBarProps) {
       iconType: "SimpleLineIcons",
     },
     {
-      label: "Trips",
-      iconName: "globe-alt",
-      iconType: "SimpleLineIcons",
+      label: "Meal",
+      iconName: "fast-food-outline",
+      iconType: "Ionicons",
     },
   ];
   const iconsRight = [
     {
-      label: "Group",
-      iconName: "people",
-      iconType: "SimpleLineIcons",
+      label: "Cook",
+      iconName: "chef-hat",
+      iconType: "MaterialCommunityIcons",
     },
     {
-      label: "Profile",
-      iconName: "user",
+      label: "Community",
+      iconName: "people",
       iconType: "SimpleLineIcons",
     },
   ];
@@ -73,9 +73,8 @@ export default function NavBar(props: NavBarProps) {
         </Block>
       ))}
       <Icon
-        onPress={() => navigation.navigate("UploadPost")}
-        iconType="AntDesign"
-        iconName="pluscircle"
+        iconType="Ionicons"
+        iconName="receipt"
         size={sizes.xxl}
         color={selectedIconColor}
         style={{

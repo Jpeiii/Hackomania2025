@@ -133,18 +133,6 @@ class Tasks:
                         "food_score": "7"
                         }}
                     ]
-                    }},
-                    {{
-                    "day": "Day 2",
-                    "daily_health_score": "...",
-                    "meals": {{ ... }},
-                    "snacks": [ ... ]
-                    }},
-                    {{
-                    "day": "Day 3",
-                    "daily_health_score": "...",
-                    "meals": {{ ... }},
-                    "snacks": [ ... ]
                     }}
                 ]
                 }}
@@ -177,73 +165,67 @@ class Tasks:
                 """)
         )
 
-    def dermatalogist_task(self, agent, payload) -> Task:
-        image_base64 = payload.get('image')
+    def dermatalogist_task(self, agent, meal_plan, payload) -> Task:
+        image_base64 = payload.get('image') # User photo as base64
+
         return Task(
             description=dedent(f"""
-            Your task as a **Facial Future Dermatologist** is to **analyze a base64-encoded image**, {image_base64} representing the user's current facial appearance and **predict potential future skin improvements** based on your expert analysis and recommended actions.
+            Your task as a Facial Future Determatologist is to perform a two-part analysis and prediction:
 
-            **Image Analysis and Future Prediction Task:**
-            Based on your deep knowledge of dermatology, nutrition, aging processes, and **predictive skin health trends**, analyze the provided base64-encoded image of the user's face. Your goal is to:
+            **Part 1: Current Age and Skin Condition Analysis from Photo**
 
-            1.  **Assess Current Skin Condition:** Evaluate the user's current skin condition in detail, including:
-                * **Texture:** Describe the smoothness, roughness, or any unevenness of the skin texture.
-                * **Complexion:** Assess the radiance, dullness, and evenness of skin tone.
-                * **Hydration:** Identify signs of dryness, dehydration, or well-hydrated skin.
-                * **Redness/Inflammation:** Note the presence and severity of any redness, inflammation, or blemishes.
-                * **Aging Signs:** Evaluate wrinkles, fine lines, crow's feet, and overall signs of aging or youthfulness.
-                * **Facial Features:**  Observe facial features for signs of bloating, definition, or any aspects related to diet and health visible on the face.
+            * **Input:** You are provided with a base64-encoded image, {image_base64} of the user's face.
+            * **Action:** Use your expert vision and dermatological knowledge to analyze this image.
+            * **Output 1: Predicted Biological Age:** Based on the facial features in the image, predict the user's current biological age. Return this as a numerical value (e.g., "35 years old").
+            * **Output 2: Current Skin Condition Report:** Generate a brief report describing the user's current skin condition as observed in the image. Focus on key indicators like texture, tone, hydration, and visible signs of aging.
 
-            2.  **Generate Personalized Recommendations:** Provide specific and actionable recommendations for improving the user's skin health. These should encompass:
-                * **Skincare Routine Adjustments:** Suggest specific products or routines.
-                * **Dietary Changes:** Recommend foods or dietary adjustments beneficial for skin health.
-                * **Lifestyle Adjustments:**  Advise on lifestyle factors like sleep, stress management, or exercise.
+            **Part 2: Future Age and Skin Condition Prediction based on Nutritionist-Provided Meal Plan**
 
-            3.  **Predict Future Skin Condition (with Recommendations Followed):** **This is crucial:**  Based on your analysis and recommendations, predict how the user's skin condition might improve **if they consistently follow your recommendations for approximately one month.**  Your prediction should be specific and address the areas you assessed in step 1. For example, predict potential improvements in:
-                * **Wrinkle Reduction:** Will wrinkles and fine lines likely lessen?
-                * **Facial Shape:** Will the face become less bloated or more defined in shape?
-                * **Skin Texture and Tone:** Will skin texture become smoother? Will skin tone become more even and radiant?
-                * **Hydration and Redness:**  Predict improvements in hydration levels and reduction in redness or inflammation.
-                * **Overall Skin Health:** Give a summary prediction of overall skin health improvement.
+            * **Input:** You are also provided with a detailed meal plan in JSON format: 
+              ```json
+              {meal_plan}
+              ```
+              This JSON includes:
+                * **advisor_rationale:** The nutritionist's explanation for the meal plan's design.
+                * **meal_plan:** A 3-day meal plan with meals and snacks.
+                * **daily_health_score:**  A score for each day representing the overall nutritional quality of that day's plan.
 
-            Complete JSON Output with Prediction:
+            * **Analysis of Meal Plan:** Carefully analyze the provided meal plan JSON. Pay close attention to:
+                * **advisor_rationale:** Understand the nutritionist's reasoning and the intended health benefits of the plan.
+                * **daily_health_scores:**  Consider the overall health quality indicated by these scores. Look for patterns – is it consistently high, moderate, or low? Are there specific days that are scored higher or lower?
+                * **Types of Meals and Foods:** Briefly review the types of foods included in the meal plan. Are they generally whole, unprocessed foods? Are there specific ingredients emphasized or excluded?
+
+            * **Assumption:** Assume the user consistently adheres to **this specific meal plan** for the next month.
+
+            * **Prediction Task:** Based on your analysis of the provided meal plan JSON (especially the advisor's rationale and daily health scores) and your understanding of nutrition's impact on skin aging and condition, predict how the user's:
+                * **Biological Age** might change after one month of following this specific meal plan (will it appear to become younger, older, or stay the same, and by approximately how much?). Justify your prediction based on the meal plan's nutritional quality.
+                * **Skin Condition** will evolve after one month. Describe the anticipated changes in skin health, texture, tone, hydration, and signs of aging.  Relate these predicted changes to specific aspects of the meal plan (e.g., "Increased intake of antioxidants from berries in the breakfast is likely to improve skin radiance," or "Lower intake of processed sugars might reduce acne breakouts.").
+
+            **Output Format:**
+
+            Respond with a JSON object containing the following fields:
+
+            ```json
             {{
-              "skin_health_report": {{
-                "texture": "Slightly rough with visible pores",
-                "complexion": "Dull with some uneven skin tone in the forehead area",
-                "hydration": "Mildly dehydrated, some dryness around the mouth",
-                "redness": "Mild redness on the cheeks and nose",
-                "aging_signs": "Noticeable fine lines around the eyes and mouth",
-                "facial_features": "Slightly bloated appearance, particularly in the cheek area"
-              }},
-              "recommendations": [
-                "Incorporate a hyaluronic acid serum twice daily for increased hydration.",
-                "Exfoliate 2-3 times per week with a gentle AHA/BHA exfoliant to improve skin texture and complexion.",
-                "Reduce sodium intake and increase potassium-rich foods to reduce facial bloating.",
-                "Consume at least 8 glasses of water daily for better hydration and toxin removal."
-              ],
-              "prediction": "Based on consistent adherence to these recommendations for one month, the user's face is likely to show improved hydration and texture, leading to smoother skin and reduced pore visibility. Redness on the cheeks and nose should diminish. Fine lines may show a slight reduction in depth (around 10-15%). Facial bloating is expected to decrease, resulting in a slightly more defined facial shape and a healthier, more radiant complexion overall."
+              "predicted_biological_age_current_photo": {payload.get('age')}, // e.g., "35 years old"
+              "current_skin_condition_report": "...", // Textual report on current skin condition
+              "predicted_biological_age_after_meal_plan": "...", // e.g., "Likely to appear 2-3 years younger"
+              "predicted_skin_condition_after_meal_plan": "...", // Textual report on predicted future skin condition, referencing aspects of the meal plan
+              "advisor_summary": "..." // A brief summary advising the user on the predicted impact of the meal plan on their skin and aging, based on the nutritionist's plan.
             }}
+            ```
 
-            Ensure your analysis is thorough, accurate, and provides both practical recommendations and a realistic, benefit-driven prediction of future skin condition improvements for the user.
+            **Tool to Use for Image Analysis:** `vision_tool` (Ensure your agent has access to this tool and it can handle base64 images for age and skin condition analysis).
+
+            Provide a comprehensive prediction, leveraging both the visual analysis of the photo and the nutritional insights derived from the provided nutritionist-generated meal plan JSON. Focus on providing actionable and understandable predictions for the user, explicitly linking your predictions to the meal plan's characteristics.
             """),
             agent=agent,
             expected_output=dedent("""
-            {{
-              "skin_health_report": {{
-                "texture": "...",
-                "complexion": "...",
-                "hydration": "...",
-                "redness": "...",
-                "aging_signs": "...",
-                "facial_features": "..."
-              }},
-              "recommendations": [
-                "Recommendation 1",
-                "Recommendation 2",
-                "Recommendation 3"
-              ],
-              "prediction": "Based on the current skin condition, the user's face is likely to show [specific predicted improvements] with the recommended changes."
-            }}
+            A JSON object containing:
+            - "predicted_biological_age_current_photo": (string, e.g., "35 years old")
+            - "current_skin_condition_report": (string, detailed report)
+            - "predicted_biological_age_after_meal_plan": (string, e.g., "Likely to appear 2-3 years younger, based on the high health score of the meal plan")
+            - "predicted_skin_condition_after_meal_plan": (string, detailed report, referencing specific aspects of the meal plan)
+            - "advisor_summary": (string, brief advisory summary)
             """)
         )
