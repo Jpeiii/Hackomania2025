@@ -6,12 +6,14 @@ import { useNavigation } from "@react-navigation/core";
 import { selectUser } from "../../reduxsaga/selectors/authSelector";
 import { useSelector } from "react-redux";
 import type { FC } from "react";
+import { set } from "lodash";
 
 const IsWebProfile: FC = () => {
   const { colors, sizes } = useTheme();
   const [post, setPost] = useState<string | null>(null);
   const navigation = useNavigation();
   const user = useSelector(selectUser);
+  const [regenerate, setRegenerate] = useState<string | null>(null);
 
   const pickFromAlbum = async () => {
     try {
@@ -39,7 +41,11 @@ const IsWebProfile: FC = () => {
               });
               const data = await response.json();
               if (data.status === "success") {
-                setPost(data.data);
+                const { skin_health_report, prediction, image } = data.data;
+                console.log("Skin Health Report:", skin_health_report);
+                console.log("Prediction:", prediction);
+                console.log("Image:", image);
+                setRegenerate(image);
               } else {
                 console.error("Error: Unexpected response status");
               }
@@ -68,6 +74,20 @@ const IsWebProfile: FC = () => {
       center
       isWeb
     >
+      {regenerate && (
+        <Block flex={1} align="center">
+          <Image
+            source={{ uri: regenerate }}
+            style={{
+              width: "120%",
+              height: "60%",
+              borderRadius: sizes.sm,
+              marginVertical: sizes.sm,
+            }}
+            resizeMode="contain"
+          />
+        </Block>
+      )}
       {post ? (
         <Block flex={1} align="center">
           <Image
