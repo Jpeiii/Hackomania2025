@@ -176,3 +176,103 @@ class Tasks:
                 A JSON object containing 'advisor_rationale' (string) and 'meal_plan' (JSON array). The 'meal_plan' is a 3-day meal plan, with each day containing 'daily_health_score', 'meals', and 'snacks'. Each meal/snack object should include "name", "recipe", "nutrition" (calories, protein, carbohydrates, fat), "portion_size", and "food_score".
                 """)
         )
+
+    def dermatalogist_task(self, agent, payload) -> Task:
+        image_base64 = payload.get('image')
+        return Task(
+            description=dedent(f"""
+            Your task as a **Facial Future Dermatologist** is to **analyze a base64-encoded image**, {image_base64} representing the user's current facial appearance and **predict potential future skin improvements** based on your expert analysis and recommended actions.
+
+            **Image Analysis and Future Prediction Task:**
+            Based on your deep knowledge of dermatology, nutrition, aging processes, and **predictive skin health trends**, analyze the provided base64-encoded image of the user's face. Your goal is to:
+
+            1.  **Assess Current Skin Condition:** Evaluate the user's current skin condition in detail, including:
+                * **Texture:** Describe the smoothness, roughness, or any unevenness of the skin texture.
+                * **Complexion:** Assess the radiance, dullness, and evenness of skin tone.
+                * **Hydration:** Identify signs of dryness, dehydration, or well-hydrated skin.
+                * **Redness/Inflammation:** Note the presence and severity of any redness, inflammation, or blemishes.
+                * **Aging Signs:** Evaluate wrinkles, fine lines, crow's feet, and overall signs of aging or youthfulness.
+                * **Facial Features:**  Observe facial features for signs of bloating, definition, or any aspects related to diet and health visible on the face.
+
+            2.  **Generate Personalized Recommendations:** Provide specific and actionable recommendations for improving the user's skin health. These should encompass:
+                * **Skincare Routine Adjustments:** Suggest specific products or routines.
+                * **Dietary Changes:** Recommend foods or dietary adjustments beneficial for skin health.
+                * **Lifestyle Adjustments:**  Advise on lifestyle factors like sleep, stress management, or exercise.
+
+            3.  **Predict Future Skin Condition (with Recommendations Followed):** **This is crucial:**  Based on your analysis and recommendations, predict how the user's skin condition might improve **if they consistently follow your recommendations for approximately one month.**  Your prediction should be specific and address the areas you assessed in step 1. For example, predict potential improvements in:
+                * **Wrinkle Reduction:** Will wrinkles and fine lines likely lessen?
+                * **Facial Shape:** Will the face become less bloated or more defined in shape?
+                * **Skin Texture and Tone:** Will skin texture become smoother? Will skin tone become more even and radiant?
+                * **Hydration and Redness:**  Predict improvements in hydration levels and reduction in redness or inflammation.
+                * **Overall Skin Health:** Give a summary prediction of overall skin health improvement.
+
+            **Expected Output Format (JSON):**
+            Respond in JSON format. The JSON should be an object containing 'skin_health_report', 'recommendations', and **'prediction'**.
+
+            *   **'skin_health_report'**: Detailed findings from the image analysis of the current skin condition (as described in step 1).
+            *   **'recommendations'**: A list of actionable advice for the user to improve their skin health (as described in step 2).
+            *   **'prediction'**:  **Your prediction of how the user's skin will likely change after one month of consistently following your recommendations.** This section should address improvements across various aspects of skin health, such as wrinkles, facial shape, texture, hydration, and overall condition.
+
+            ```json
+            {{
+              "skin_health_report": {{
+                "texture": "...",
+                "complexion": "...",
+                "hydration": "...",
+                "redness": "...",
+                "aging_signs": "...",
+                "facial_features": "..."
+              }},
+              "recommendations": [
+                "Recommendation 1",
+                "Recommendation 2",
+                "Recommendation 3"
+              ],
+              "prediction": "Based on consistent adherence to these recommendations for one month, the user's face is likely to show [specific predicted improvements, e.g., improved hydration and texture, reduced redness, slight reduction in fine lines, less facial bloating, more defined jawline], leading to an overall [quantifiable or qualitative prediction, e.g., 20% reduction in wrinkle depth, noticeably clearer complexion, healthier and more youthful appearance]."
+            }}
+            ```
+
+            **Example (Complete JSON Output with Prediction):**
+
+            ```json
+            {{
+              "skin_health_report": {{
+                "texture": "Slightly rough with visible pores",
+                "complexion": "Dull with some uneven skin tone in the forehead area",
+                "hydration": "Mildly dehydrated, some dryness around the mouth",
+                "redness": "Mild redness on the cheeks and nose",
+                "aging_signs": "Noticeable fine lines around the eyes and mouth",
+                "facial_features": "Slightly bloated appearance, particularly in the cheek area"
+              }},
+              "recommendations": [
+                "Incorporate a hyaluronic acid serum twice daily for increased hydration.",
+                "Exfoliate 2-3 times per week with a gentle AHA/BHA exfoliant to improve skin texture and complexion.",
+                "Reduce sodium intake and increase potassium-rich foods to reduce facial bloating.",
+                "Consume at least 8 glasses of water daily for better hydration and toxin removal."
+              ],
+              "prediction": "Based on consistent adherence to these recommendations for one month, the user's face is likely to show improved hydration and texture, leading to smoother skin and reduced pore visibility. Redness on the cheeks and nose should diminish. Fine lines may show a slight reduction in depth (around 10-15%). Facial bloating is expected to decrease, resulting in a slightly more defined facial shape and a healthier, more radiant complexion overall."
+            }}
+
+            Ensure your analysis is thorough, accurate, and provides both practical recommendations and a realistic, benefit-driven prediction of future skin condition improvements for the user.
+            """),
+            agent=agent,
+            expected_output=dedent("""
+            Output should be in JSON format:
+            {{
+              "skin_health_report": {{
+                "texture": "...",
+                "complexion": "...",
+                "hydration": "...",
+                "redness": "...",
+                "aging_signs": "...",
+                "facial_features": "..."
+              }},
+              "recommendations": [
+                "Recommendation 1",
+                "Recommendation 2",
+                "Recommendation 3"
+              ],
+              "prediction": "Based on the current skin condition, the user's face is likely to show [specific predicted improvements] with the recommended changes."
+            }}
+            """)
+        )
