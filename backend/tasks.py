@@ -206,35 +206,7 @@ class Tasks:
                 * **Hydration and Redness:**  Predict improvements in hydration levels and reduction in redness or inflammation.
                 * **Overall Skin Health:** Give a summary prediction of overall skin health improvement.
 
-            **Expected Output Format (JSON):**
-            Respond in JSON format. The JSON should be an object containing 'skin_health_report', 'recommendations', and **'prediction'**.
-
-            *   **'skin_health_report'**: Detailed findings from the image analysis of the current skin condition (as described in step 1).
-            *   **'recommendations'**: A list of actionable advice for the user to improve their skin health (as described in step 2).
-            *   **'prediction'**:  **Your prediction of how the user's skin will likely change after one month of consistently following your recommendations.** This section should address improvements across various aspects of skin health, such as wrinkles, facial shape, texture, hydration, and overall condition.
-
-            ```json
-            {{
-              "skin_health_report": {{
-                "texture": "...",
-                "complexion": "...",
-                "hydration": "...",
-                "redness": "...",
-                "aging_signs": "...",
-                "facial_features": "..."
-              }},
-              "recommendations": [
-                "Recommendation 1",
-                "Recommendation 2",
-                "Recommendation 3"
-              ],
-              "prediction": "Based on consistent adherence to these recommendations for one month, the user's face is likely to show [specific predicted improvements, e.g., improved hydration and texture, reduced redness, slight reduction in fine lines, less facial bloating, more defined jawline], leading to an overall [quantifiable or qualitative prediction, e.g., 20% reduction in wrinkle depth, noticeably clearer complexion, healthier and more youthful appearance]."
-            }}
-            ```
-
-            **Example (Complete JSON Output with Prediction):**
-
-            ```json
+            Complete JSON Output with Prediction:
             {{
               "skin_health_report": {{
                 "texture": "Slightly rough with visible pores",
@@ -257,7 +229,6 @@ class Tasks:
             """),
             agent=agent,
             expected_output=dedent("""
-            Output should be in JSON format:
             {{
               "skin_health_report": {{
                 "texture": "...",

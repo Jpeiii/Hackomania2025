@@ -24,18 +24,25 @@ def faceRecognition():
         verbose=True,
     )
     result = crew.kickoff()
-    print(result)
+    raw = result.raw
+    raw_str = raw.strip()
+    json_start = raw_str.find('{')
+    json_end = raw_str.rfind('}') + 1
+    json_content = raw_str[json_start:json_end]
+    # print(json_content)
     try:
-        result_json = json.loads(result)
-        if result_json:
-            print("Result JSON: ", result_json)
-            # create_image(result_json, payload.get('image'))
-            # return jsonify({"status": "success", "data": result_json, "image": "regenerated_image"})
+        parsed_json = json.loads(json_content)
     except json.JSONDecodeError:
-        return jsonify({"status": "error", "message": "Invalid JSON format in result"})
-    # if result:
-    #     create_image(result,payload.get('image'))
-    #     return jsonify({"status": "success", "data": "This is a dummy result", "image": regenerated_image})
+        print("Failed to parse JSON")
+    print(parsed_json['prediction'])
+    # return jsonify({"status": "success", "data": "test"})
+    image = create_image(parsed_json['prediction'],payload.get('image'))
+    data = {
+        "skin_health_report": parsed_json['prediction'],
+        "prediction": parsed_json['prediction'],
+        "image": image
+    }
+    return jsonify({"status": "success", "data": data})
 
 @app.route('/crewai', methods=['POST'])
 def connectCrewAI():
@@ -51,7 +58,6 @@ def connectCrewAI():
     )
 
     result = crew.kickoff()
-    print(result)
     # if result:
     # # For now, return a dummy result to ensure the return is able to parse
     #     testing = {"status": "success", "data": "This is a dummy result"}

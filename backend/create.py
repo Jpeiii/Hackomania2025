@@ -3,6 +3,11 @@ import os
 from dotenv import load_dotenv
 import base64
 import requests
+import json
+from base64 import b64decode
+from pathlib import Path
+from PIL import Image
+from io import BytesIO
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,33 +20,34 @@ client = OpenAI(
     api_key=openai_key,
 )
 
-def create_image(description, original_image_url):
-    print("Running create_image")    
-    # Decode the base64 image
-    image_data = base64.b64decode(original_image_url)
-    image_path = "decoded_image.jpg"
-    
-    # Write the decoded image to a file
-    with open(image_path, "wb") as image_file:
-        image_file.write(image_data)
-    
-    # Prepare the request
-    url = "https://api.openai.com/v1/images/edits"
-    headers = {
-        "Authorization": f"Bearer {openai_key}"
-    }
-    files = {
-        "image": open(image_path, "rb"),
-        "prompt": (None, description),
-        "n": (None, "1"),
-        "size": (None, "256x256")
-    }
-    
-    # Send the request
-    response = requests.post(url, headers=headers, files=files)
-    print(response)
-    # # Check for errors
-    # response.raise_for_status()
-    
-    # # Return the URL of the generated image
-    # return response.json()["data"][0]["url"]
+def create_image(description, base64_image):
+    # Read the image from the local file system
+    image_path = "test.jpeg"
+    image = Image.open(image_path).convert("RGBA")
+
+    # Get the original size of the image
+    original_width, original_height = image.size
+
+    # Calculate the new size (50% smaller)
+    new_width = original_width // 2
+    new_height = original_height // 2
+
+    # Resize the image
+    image = image.resize((new_width, new_height))
+   
+    IMAGE_PATH = "test_resize.png"
+    image.save(IMAGE_PATH, format="PNG")
+    PROMPT=f"""regenerate the user face with the prediction"""
+    response = client.images.edit(
+        image=open(IMAGE_PATH, mode="rb"),
+        n=1,
+        size="1024x1024",
+        response_format="url",
+        prompt=PROMPT
+    )
+    # Print the response for debugging
+    json_response = response.to_json()
+    formated_response = json.loads(json_response)
+    url = formated_response['data'][0]['url']
+    print(url)
+    # print(dict_response['data'][0].url)
