@@ -1,6 +1,47 @@
-# Welcome to your Expo app 👋
+> [!IMPORTANT]
+>
+> ## Who Are We?
+>
+> We are Nomad, a group of women passionate about using technology to solve problems in the travel industry. We're driven by our enthusiasm to build our own tech startup and make a difference in the world of travel.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> [!IMPORTANT]
+>
+> ## Why Us?
+>
+> We bridge the gap between travelers and travel agencies. Traditional travel planning often involves multiple agencies (local and destination-based), increasing costs and complexity. Our platform streamlines the > process, offering travelers a single point of contact and eliminating unnecessary expenses. By focusing on high-end travelers, we provide a premium experience without the hassle of multiple intermediaries.
+
+> [!IMPORTANT]
+>
+> ## What we are doing?
+>
+> Our app supports iOS, Android, and web browsers. It's a social and booking platform dedicated to premium travelers, connecting them with luxury travel agencies offering customized experiences.
+
+> [!NOTE]
+> For our consumer-facing solution, which is a social media platform that simplifies trip booking and travel planning, we support iOS, Android, and web browsers
+
+## Prerequisite
+
+### For Mac OS
+
+1. Install Node & Watchman
+
+   ```bash
+   # v20.12.1
+   brew install node
+   brew install watchman
+
+   ```
+
+2. Xcode
+
+   ```
+   Install Xcode via the Mac App Store.
+   ```
+
+3. Install CocoaPods
+   ```bash
+   sudo gem install cocoapods
+   ```
 
 ## Get started
 
@@ -10,41 +51,27 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+## Run the app
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### For Android
 
 ```bash
-npm run reset-project
+# using npm
+npm run android
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### For iOS
 
-## Learn more
+```bash
+# using npm
+npm run ios
 
-To learn more about developing your project with Expo, look at the following resources:
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### For web
 
-## Join the community
+```bash
+# using npm
+npm run web
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
