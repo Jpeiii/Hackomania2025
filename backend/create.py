@@ -15,7 +15,6 @@ load_dotenv()
 # Get the OPENAI_KEY
 openai_key = os.getenv('OPENAI_KEY')
 
-print(f'OPENAI_KEY: {openai_key}')
 client = OpenAI(
     api_key=openai_key,
 )
@@ -49,5 +48,4 @@ def create_image(description, base64_image):
     json_response = response.to_json()
     formated_response = json.loads(json_response)
     url = formated_response['data'][0]['url']
-    print(url)
-    # print(dict_response['data'][0].url)
+    return url
