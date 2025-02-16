@@ -19,9 +19,14 @@ client = OpenAI(
     api_key=openai_key,
 )
 
+
 def create_image(description, base64_image):
     # Read the image from the local file system
+    # Decode the base64 image and save it as test.jpeg
+    image_data = b64decode(base64_image)
     image_path = "test.jpeg"
+    with open(image_path, "wb") as f:
+        f.write(image_data)
     image = Image.open(image_path).convert("RGBA")
 
     # Get the original size of the image
@@ -33,10 +38,10 @@ def create_image(description, base64_image):
 
     # Resize the image
     image = image.resize((new_width, new_height))
-   
+
     IMAGE_PATH = "test_resize.png"
     image.save(IMAGE_PATH, format="PNG")
-    PROMPT=f"""regenerate the user face with the prediction"""
+    PROMPT = f"""regenerate the user face with the prediction: {description}"""
     response = client.images.edit(
         image=open(IMAGE_PATH, mode="rb"),
         n=1,

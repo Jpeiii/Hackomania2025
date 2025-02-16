@@ -1,7 +1,5 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import store from "../reduxsaga/store";
-import { Provider } from "react-redux";
 import AppNavigator from "./AppNavigator";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -32,15 +30,13 @@ const App = () => {
   }
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <NavigationContainer>
-          <DataProvider>
-            <AppNavigator />
-          </DataProvider>
-        </NavigationContainer>
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <NavigationContainer>
+        <DataProvider>
+          <AppNavigator />
+        </DataProvider>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 };
 
