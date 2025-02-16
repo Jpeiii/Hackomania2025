@@ -9,7 +9,6 @@
 4. Health & Aging Prediction – Analyzes dietary patterns to predict skin health and aging trends, offering proactive recommendations.
 
 ## Tech Stack
-
 frontend:
 > React Native
 
@@ -20,5 +19,5 @@ Backend:
 Application
 > CrewAI
 > Ollama
-> DALLE-2
+> DALL-E 
 ```

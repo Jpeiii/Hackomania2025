@@ -1,4 +1,5 @@
 backend/.env
+backend/test_resize.png
 .env
 
 .venv
