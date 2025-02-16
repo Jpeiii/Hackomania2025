@@ -23,10 +23,7 @@ client = OpenAI(
 def create_image(description, base64_image):
     # Read the image from the local file system
     # Decode the base64 image and save it as test.jpeg
-    image_data = b64decode(base64_image)
     image_path = "test.jpeg"
-    with open(image_path, "wb") as f:
-        f.write(image_data)
     image = Image.open(image_path).convert("RGBA")
 
     # Get the original size of the image
